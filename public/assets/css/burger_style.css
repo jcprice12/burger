@@ -1,24 +1,62 @@
 body{
-	background: #eee;
+    background: #eee;
+    font-size: 16px;
+}
+
+.burgerId{
+    font-size: 21px;
+    position: absolute;
+    z-index: 99;
+    left: 10px;
+    top: 5px;
+    color:#fff;
+    border-radius:50%;
+}
+
+.burgerContainer{
+    position:relative;
+    border-radius: 4px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #428bca;
+}
+
+.eatBurgerButton{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#formPanel{
+    margin-top:30px;
 }
 
 h1{
-	font-size: 80px;
+	font-size: 70px;
 }
 
-hr{
-	background: #2f2f2f;
-	height:1px;
+h3{
+    margin-top:10px;
+    margin-bottom: 5px;
 }
 
-p {
-	font-size: 20px;
+img{
+    background: #428bca;
+    margin-bottom: 20px;
 }
 
 .mySiteHeader{
-	background: #ccc;
+    background: #428bca;
+    color: #fff;
 }
 
 .page-header{
 	border-bottom:none;
+}
+
+.panel{
+	margin-top: 30px;
+}
+
+textarea {
+    resize: none;
 }
