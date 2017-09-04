@@ -2,23 +2,34 @@ var express = require("express");
 
 var router = express.Router();
 
-// Import the model (cat.js) to use its database functions.
+// Import models
 var burger = require("../models/burger.js");
+var topping = require("../models/topping.js");
+
+function formatBurgers(burgersToppings){
+    for(var i = 0; i < burgersToppings.length; i++){
+        var toppings = burgersToppings[i].toppings;
+        var toppingsArr = toppings.split(',');
+        burgersToppings[i].toppings = toppingsArr;
+    }
+    return burgersToppings;
+}
 
 router.get("/", function(req, res) {
-    burger.getBurgers()
-    .then(function(data) {
+    var promises = [];
+    promises.push(burger.getBurgers());
+    promises.push(topping.getToppings());
+    Promise.all(promises).then(function(result){
+        var myBurgers = formatBurgers(result[0]);
         var hbsObject = {
-            burgers: data,
-        };
+            burgers: myBurgers,
+            toppings : result[1],
+        }
         console.log(hbsObject);
         res.render("index", hbsObject);
-    }).catch(function(err){
+    }, function(err){
         console.log(err);
-        var hbsObj = {
-            burgers : [],
-        }
-        res.render("index", hbsObj);
+        res.status(500).send("Error on the server while getting toppings and burgers. Please try again later");
     });
 });
 

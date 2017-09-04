@@ -22,7 +22,7 @@ INSERT INTO `BurgersToppings` (`idBurgers`, `nameToppings`) VALUES
 (2, "ketchup"),
 (2, "mustard"),
 (3, "mayonnaise"),#that's really gross
-(1, "guacamole"),
-(1, "ketchup"),
+(1, "cheese"),
 (1, "onions"),
-(1, "cheese");
+(1, "ketchup"),
+(1, "mustard");
