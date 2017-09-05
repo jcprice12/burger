@@ -67,7 +67,8 @@ var orm = {
         return promise;
     },
 
-    insertOneManyToMany : function(table1, obj1, table2, arrayOfObjs){
+    //for when you are only inserting on one side of the many to many relationship and you have to insert new records into the junction table
+    insertOneManyToMany : function(table1, obj1, junctionTable, table1ForeignKeyName, arrayOfObjs){
         var promise = new Promise(function(resolve, reject){
             connection.beginTransaction(function(errTrans){
                 if(errTrans){
@@ -75,7 +76,7 @@ var orm = {
                         reject(errTrans);
                     });
                 } else {
-                    connection.query("INSERT INTO ?? SET ?", obj1, function(errIns, insRes){
+                    connection.query("INSERT INTO ?? SET ?", [table1, obj1], function(errIns, insRes){
                         if(errIns){
                             connection.rollback(function(){
                                 reject(errIns);
@@ -86,6 +87,10 @@ var orm = {
                                     reject("Array of Objects must have something in it");
                                 });
                             } else {
+                                var id = insRes.insertId;
+                                for(var i = 0; i < arrayOfObjs.length; i++){
+                                    arrayOfObjs[i][table1ForeignKeyName] = id; 
+                                }
                                 var sqlStr = "INSERT INTO ?? SET ?";
                                 // var keys = Object.keys(arrayOfObjs[0]);
                                 // for (var i = 0; i < keys.length; i++){
@@ -95,7 +100,7 @@ var orm = {
                                 //         sqlStr += (keys[i] + ",");
                                 //     }
                                 // }
-                                connection.query(sqlStr, [table2, arrayOfObjs], function(errIns2, ins2Res){
+                                connection.query(sqlStr, [junctionTable, arrayOfObjs], function(errIns2, ins2Res){
                                     if(errIns2){
                                         connection.rollback(function(){
                                             reject(errIns2);

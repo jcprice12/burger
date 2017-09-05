@@ -11,7 +11,7 @@
             <h2>Craft Your Burger</h2>
         </div>
         <div class="panel-body">
-            <form action="/" method="POST" id="myForm">
+            <form id="myForm">
 
                 <div class="form-group myContainer">
                     <label for="commentText">Comment</label>
@@ -19,12 +19,11 @@
                 </div>
 
                 <div id="toppingsGroup" class="form-group">
-                    <div class="checkbox">
-                        <label><input type="checkbox" value="cheese">Cheese</label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" value="tomato">Tomato</label>
-                    </div>
+                    {{#each toppings}}
+                        <div class="checkbox">
+                            <label><input class="checkInput" type="checkbox" name="{{this.nameToppings}}" value="{{this.nameToppings}}">{{this.nameToppings}}</label>
+                        </div>
+                    {{/each}}
                 </div>
 
                 <button id="submitCreation" class="btn btn-primary btn-lg btn-block mySubmit" type="submit">
@@ -116,3 +115,4 @@
         </div>
     </div>
 </div>
+<script src="assets/javascript/client.js"></script>

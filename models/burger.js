@@ -28,13 +28,13 @@ var burger = {
         });
         return promise;
     },
-    createBurger: function(burger, toppings) {
+    createBurger: function(burgerObj, toppings) {
         var promise = new Promise(function(resolve, reject){
-            orm.insertOneManyToMany("Burgers", burger, "BurgersToppings", toppings)
+            orm.insertOneManyToMany("Burgers", burgerObj, "BurgersToppings", "idBurgers", toppings)
             .then(function(data){
                 resolve(data);
             }).catch(function(err){
-                reject(data);
+                reject(err);
             });
         });
         return promise;

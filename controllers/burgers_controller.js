@@ -55,13 +55,14 @@ router.put("/:id", function(req, res) {
 router.post("/", function(req, res){
     var formData = req.body;
     console.log(formData);
-    burger.createBurger(burger, toppings)
+
+    burger.createBurger(formData.burger, formData.toppings)
     .then(function(data){
         console.log(data)
         res.redirect("/");
     }).catch(function(err){
         console.log(err);
-        res.redirect("/");
+        res.status(500).send("Error making a burger. Please try again later");
     });
 });
 

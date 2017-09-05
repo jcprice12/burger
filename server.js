@@ -9,8 +9,10 @@ var app = express();
 // Serve static content for the app from the "public" directory in the application directory.
 app.use(express.static("public"));
 //use the body parser
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.text());
+app.use(bodyParser.json({ type: "application/vnd.api+json" }));
 
 // Override POST for form submission
 app.use(methodOverride("_method"));
