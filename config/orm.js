@@ -11,7 +11,6 @@ var orm = {
                 }
             });
         });
-
         return promise;
     },
 
@@ -34,7 +33,37 @@ var orm = {
                 }
             });
         });
+        return promise;
+    },
 
+    updateFieldOnId : function(table, updateInfo, idColumn, id){
+        var promise = new Promise(function(resolve, reject){
+            connection.beginTransaction(function(errCommit){
+                if(errCommit){
+                    connection.rollback(function(){
+                        reject(errCommit);
+                    });
+                } else {
+                    connection.query("UPDATE ?? SET ? WHERE ?? = ?", [table, updateInfo, idColumn, id], function(errUpdate, updateRes){
+                        if(errUpdate){
+                            connection.rollback(function(){
+                                reject(errUpdate);
+                            });
+                        } else {
+                            connection.commit(function(errCommit){
+                                if(errCommit){
+                                    connection.rollback(function(){
+                                        reject(errCommit);
+                                    });
+                                } else {
+                                    resolve(updateRes);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
         return promise;
     },
 
@@ -42,14 +71,20 @@ var orm = {
         var promise = new Promise(function(resolve, reject){
             connection.beginTransaction(function(errTrans){
                 if(errTrans){
-                    reject(errTrans);
+                    connection.rollback(function(){
+                        reject(errTrans);
+                    });
                 } else {
                     connection.query("INSERT INTO ?? SET ?", obj1, function(errIns, insRes){
                         if(errIns){
-                            reject(errIns);
+                            connection.rollback(function(){
+                                reject(errIns);
+                            });
                         } else {
                             if(arrayOfObjs > 0){
-                                reject("Array of Objects must have something in it");
+                                connection.rollback(function(){
+                                    reject("Array of Objects must have something in it");
+                                });
                             } else {
                                 var sqlStr = "INSERT INTO ?? SET ?";
                                 // var keys = Object.keys(arrayOfObjs[0]);
@@ -62,13 +97,17 @@ var orm = {
                                 // }
                                 connection.query(sqlStr, [table2, arrayOfObjs], function(errIns2, ins2Res){
                                     if(errIns2){
-                                        reject(errIns2);
+                                        connection.rollback(function(){
+                                            reject(errIns2);
+                                        });
                                     } else {
                                         connection.commit(function(errCommit){
                                             if(errCommit){
-                                                reject(errCommit);
+                                                connection.rollback(function(){
+                                                    reject(errCommit);
+                                                });
                                             } else {
-                                                resolve(true);
+                                                resolve(ins2Res);
                                             }
                                         });
                                     }
@@ -80,7 +119,6 @@ var orm = {
                 }
             });
         });
-
         return promise;
     },
 }

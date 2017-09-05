@@ -10,7 +10,14 @@ function formatBurgers(burgersToppings){
     for(var i = 0; i < burgersToppings.length; i++){
         var toppings = burgersToppings[i].toppings;
         var toppingsArr = toppings.split(',');
-        burgersToppings[i].toppings = toppingsArr;
+        toppings = [];
+        for(var j = 0; j < toppingsArr.length; j++){
+            var toppingObj = {
+                "nameToppings" : toppingsArr[j],
+            }
+            toppings.push(toppingObj);
+        }
+        burgersToppings[i].toppings = toppings;
     }
     return burgersToppings;
 }
@@ -32,6 +39,18 @@ router.get("/", function(req, res) {
         res.status(500).send("Error on the server while getting toppings and burgers. Please try again later");
     });
 });
+
+router.put("/:id", function(req, res) {
+    var id = req.params.id;
+    burger.devourBurger(id)
+    .then(function(data){
+        console.log(data);
+        res.redirect("/");
+    }).catch(function(err){
+        console.log(err);
+        res.status(500).send("Error updating burger with id: " + id);
+    });
+})
 
 router.post("/", function(req, res){
     var formData = req.body;

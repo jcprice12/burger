@@ -45,57 +45,39 @@
                     <h2>Uneaten Burgers</h2>
                 </div>
                 <div class="container-fluid burgersCol">
-                    <div class="burgerContainer">
-                        <div class="burgerId">
-                            100000203
-                        </div>
-                        <img src="assets/img/burger.png" alt="burger" class="col-xs-12">
-                        <div class="container-fluid">
-                            <h3>Toppings</h3>
-                            <ul>
-                                <li>Coffee</li>
-                                <li>Tea</li>
-                                <li>Milk</li>
-                            </ul>
-                        </div>
-                        <div class="container-fluid">
-                            <h3>Comments</h3>
-                            <p>Don't forget the secret sauce</p>
-                        </div>
-                        <div class="container-fluid">
-                            <h3>Date Created</h3>
-                            <p>06-15-2017</p>
-                        </div>
-                        <div class="container-fluid eatBurgerButton">
-                            <form action="" method="POST">
-                                <button id="submitDevour" class="btn btn-primary btn-lg btn-block myDevour" type="submit">
-                                    Eat Da Burger!
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="burgerContainer">
-                        <img src="assets/img/burger.png" alt="burger" class="col-xs-12">
-                        <div class="container-fluid">
-                            <h3>Toppings</h3>
-                            <ul>
-                                <li>Coffee</li>
-                                <li>Tea</li>
-                                <li>Milk</li>
-                            </ul>
-                        </div>
-                        <div class="container-fluid">
-                            <h3>Comments</h3>
-                            <p>Don't forget the secret sauce</p>
-                        </div>
-                        <div class="container-fluid eatBurgerButton">
-                            <form action="" method="POST">
-                                <button id="submitDevour" class="btn btn-primary btn-lg btn-block myDevour" type="submit">
-                                    Eat Da Burger!
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                    {{#each burgers}}
+                        {{#unless this.devoured}}
+                            <div class="burgerContainer">
+                                <div class="burgerId">
+                                    {{this.idBurgers}}
+                                </div>
+                                <img src="assets/img/burger.png" alt="burger" class="col-xs-12">
+                                <div class="container-fluid">
+                                    <h3>Toppings</h3>
+                                    <ul>
+                                        {{#each this.toppings}}
+                                            <li>{{this.nameToppings}}</li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                                <div class="container-fluid">
+                                    <h3>Comments</h3>
+                                    <p>{{this.comments}}</p>
+                                </div>
+                                <div class="container-fluid">
+                                    <h3>Date Created</h3>
+                                    <p>{{this.date}}</p>
+                                </div>
+                                <div class="container-fluid eatBurgerButton">
+                                    <form action="/{{this.idBurgers}}?_method=PUT" method="POST">
+                                        <button id="submitDevour" class="btn btn-primary btn-lg btn-block myDevour" type="submit">
+                                            Eat Da Burger!
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        {{/unless}}
+                    {{/each}}
                 </div>
             </div>
             <div class="col-xs-12 col-sm-6">
@@ -103,21 +85,32 @@
                     <h2>Eaten Burgers</h2>
                 </div>
                 <div class="container-fluid burgersCol">
-                    <div class="burgerContainer">
-                        <img src="assets/img/burger.png" alt="burger" class="col-xs-12">
-                        <div class="container-fluid">
-                            <h3>Toppings</h3>
-                            <ul>
-                                <li>Coffee</li>
-                                <li>Tea</li>
-                                <li>Milk</li>
-                            </ul>
-                        </div>
-                        <div class="container-fluid">
-                            <h3>Comments</h3>
-                            <p>Don't forget the secret sauce</p>
-                        </div>
-                    </div>
+                    {{#each burgers}}
+                        {{#if this.devoured}}
+                            <div class="burgerContainer">
+                                <div class="burgerId">
+                                    {{this.idBurgers}}
+                                </div>
+                                <img src="assets/img/burger.png" alt="burger" class="col-xs-12">
+                                <div class="container-fluid">
+                                    <h3>Toppings</h3>
+                                    <ul>
+                                        {{#each this.toppings}}
+                                            <li>{{this.nameToppings}}</li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                                <div class="container-fluid">
+                                    <h3>Comments</h3>
+                                    <p>{{this.comments}}</p>
+                                </div>
+                                <div class="container-fluid">
+                                    <h3>Date Eaten</h3>
+                                    <p>{{this.eatenDate}}</p>
+                                </div>
+                            </div>
+                        {{/if}}
+                    {{/each}}
                 </div>
             </div>
         </div>
