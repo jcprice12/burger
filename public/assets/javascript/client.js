@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    //adjust form data to send to "/" as POST
     $("#myForm").submit(function(event){
         event.preventDefault();
 
@@ -23,7 +24,7 @@ $(document).ready(function(){
 			data : myObj,
 			dataType : "json",
 			success : function(dataBack){
-                location.reload();
+                location.reload();//refresh page
             },
         });
     });

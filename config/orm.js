@@ -1,6 +1,10 @@
 var connection = require("./connection.js");
 
+//A query helper to be used by my models
+//Every query returns a promise
 var orm = {
+
+    //simple select * and order by
     selectAll : function(table, orderBy){
         var promise = new Promise(function(resolve, reject){
             connection.query("SELECT * FROM ?? ORDER BY ??", [table,orderBy], function(err, res){
@@ -14,6 +18,7 @@ var orm = {
         return promise;
     },
 
+    //select all of one table that has a many to many relationship with another table. concats chosen column of second table into string separated by commas
     selectAllManyToMany : function(table1, table2, intersectionTable, table1Id, table2Id, cols, arrayIdentifier){
         var promise = new Promise(function(resolve, reject){
             var sqlStr = "SELECT";
@@ -35,6 +40,7 @@ var orm = {
         return promise;
     },
 
+    //misnomer. Can update multiple fiels as specified by the update info object. updates by id (or certain where condition)
     updateFieldOnId : function(table, updateInfo, idColumn, id){
         var promise = new Promise(function(resolve, reject){
             connection.beginTransaction(function(errCommit){

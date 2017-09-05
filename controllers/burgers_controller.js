@@ -6,6 +6,7 @@ var router = express.Router();
 var burger = require("../models/burger.js");
 var topping = require("../models/topping.js");
 
+//helper function to format the array of burgers and their toppings to return back to the client
 function formatBurgers(burgersToppings){
     for(var i = 0; i < burgersToppings.length; i++){
         var toppings = burgersToppings[i].toppings;
@@ -22,10 +23,12 @@ function formatBurgers(burgersToppings){
     return burgersToppings;
 }
 
+//route for main page (gets burgers and toppings)
 router.get("/", function(req, res) {
     var promises = [];
     promises.push(burger.getBurgers());
     promises.push(topping.getToppings());
+    //resolve all promises
     Promise.all(promises).then(function(result){
         var myBurgers = formatBurgers(result[0]);
         var hbsObject = {
@@ -39,6 +42,7 @@ router.get("/", function(req, res) {
     });
 });
 
+//to update burger (someone ate it)
 router.put("/:id", function(req, res) {
     var id = req.params.id;
     burger.devourBurger(id)
@@ -51,6 +55,7 @@ router.put("/:id", function(req, res) {
     });
 })
 
+//to create a burger
 router.post("/", function(req, res){
     var formData = req.body;
     console.log(formData);
