@@ -12,21 +12,18 @@ $(document).ready(function(){
         var checks = document.getElementsByClassName("checkInput");
         for(var i = 0; i < checks.length; i++){
             if(checks[i].checked){
-                var topping = {
-                    nameToppings : ($(checks[i]).val()),
-                }
+                var topping = [($(checks[i]).val())];
                 myObj.toppings.push(topping);
             }
         }
 
-        console.log(myObj);
         $.ajax({
 			type: "POST",
 			url : "/",
 			data : myObj,
 			dataType : "json",
 			success : function(dataBack){
-                console.log(dataBack);
+                location.reload();
             },
         });
     });

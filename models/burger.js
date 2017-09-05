@@ -30,7 +30,7 @@ var burger = {
     },
     createBurger: function(burgerObj, toppings) {
         var promise = new Promise(function(resolve, reject){
-            orm.insertOneManyToMany("Burgers", burgerObj, "BurgersToppings", "idBurgers", toppings)
+            orm.insertOneManyToMany("Burgers", burgerObj, "BurgersToppings", "idBurgers", "nameToppings", toppings)
             .then(function(data){
                 resolve(data);
             }).catch(function(err){

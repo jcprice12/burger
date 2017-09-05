@@ -35,7 +35,6 @@ router.get("/", function(req, res) {
         console.log(hbsObject);
         res.render("index", hbsObject);
     }, function(err){
-        console.log(err);
         res.status(500).send("Error on the server while getting toppings and burgers. Please try again later");
     });
 });
@@ -55,11 +54,10 @@ router.put("/:id", function(req, res) {
 router.post("/", function(req, res){
     var formData = req.body;
     console.log(formData);
-
     burger.createBurger(formData.burger, formData.toppings)
     .then(function(data){
         console.log(data)
-        res.redirect("/");
+        res.json(data);
     }).catch(function(err){
         console.log(err);
         res.status(500).send("Error making a burger. Please try again later");

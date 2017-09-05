@@ -24,7 +24,6 @@ var orm = {
             sqlStr += " NATURAL JOIN ??";
             sqlStr += " GROUP BY ??";
             sqlStr += " ORDER BY ??";
-            console.log(sqlStr);
             connection.query(sqlStr, [table2Id, arrayIdentifier, table1, table2, intersectionTable, table1Id, table1Id], function(err, res){
                 if(err){
                     reject(err);
@@ -68,7 +67,7 @@ var orm = {
     },
 
     //for when you are only inserting on one side of the many to many relationship and you have to insert new records into the junction table
-    insertOneManyToMany : function(table1, obj1, junctionTable, table1ForeignKeyName, arrayOfObjs){
+    insertOneManyToMany : function(table1, obj1, junctionTable, table1ForeignKeyName, table2ForeignKeyName, arrayOfInserts){
         var promise = new Promise(function(resolve, reject){
             connection.beginTransaction(function(errTrans){
                 if(errTrans){
@@ -82,25 +81,16 @@ var orm = {
                                 reject(errIns);
                             });
                         } else {
-                            if(arrayOfObjs > 0){
+                            if(arrayOfInserts > 0){
                                 connection.rollback(function(){
-                                    reject("Array of Objects must have something in it");
+                                    reject("Array of inserts must have something in it");
                                 });
                             } else {
-                                var id = insRes.insertId;
-                                for(var i = 0; i < arrayOfObjs.length; i++){
-                                    arrayOfObjs[i][table1ForeignKeyName] = id; 
+                                for(var i = 0; i < arrayOfInserts.length; i++){
+                                    arrayOfInserts[i].push(insRes.insertId);
                                 }
-                                var sqlStr = "INSERT INTO ?? SET ?";
-                                // var keys = Object.keys(arrayOfObjs[0]);
-                                // for (var i = 0; i < keys.length; i++){
-                                //     if(i === (keys.length - 1)){
-                                //         sqlStr += (keys[i]+ ") ");
-                                //     } else {
-                                //         sqlStr += (keys[i] + ",");
-                                //     }
-                                // }
-                                connection.query(sqlStr, [junctionTable, arrayOfObjs], function(errIns2, ins2Res){
+                                var sqlStr = "INSERT INTO ?? (??,??) VALUES ?";
+                                connection.query(sqlStr, [junctionTable, table2ForeignKeyName, table1ForeignKeyName, arrayOfInserts], function(errIns2, ins2Res){
                                     if(errIns2){
                                         connection.rollback(function(){
                                             reject(errIns2);
